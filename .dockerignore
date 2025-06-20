@@ -1,0 +1,5 @@
+README.md
+Dockerfile
+.gitignore
+sqlite3.db
+temporary/

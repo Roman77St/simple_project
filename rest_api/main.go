@@ -18,7 +18,7 @@ import (
 
 
 func main()  {
-	err := storage.InitDatabase("./storage/sqlite3.db")
+	err := storage.InitDatabase("./sqlite3.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -28,5 +28,5 @@ func main()  {
 	router.HandleFunc("/users/{id:[0-9]+}", handlers.DeleteUser).Methods("DELETE")
 	router.HandleFunc("/users", handlers.GetUsers).Methods("GET")
 	router.HandleFunc("/users", handlers.CreateUser).Methods("POST")
-	http.ListenAndServe("localhost:8080", router)
+	http.ListenAndServe(":8080", router)
 }
