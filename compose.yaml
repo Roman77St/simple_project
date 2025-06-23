@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_container
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: "db_name"
+      POSTGRES_USER: "db_user"
+      POSTGRES_PASSWORD: "db_password"
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "8085:8080"
+    links:
+      - "db:db"
+    depends_on:
+      - db
+  rest_api:
+    build: .
+    image: rest-api
+    container_name: rest-api-container
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+
+volumes:
+  data:
+
+
+
+
+

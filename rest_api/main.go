@@ -10,17 +10,17 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Roman77St/simple_project/storage"
 	"github.com/Roman77St/simple_project/rest_api/handlers"
+	"github.com/Roman77St/simple_project/storage"
 
 	"github.com/gorilla/mux"
 )
 
 
 func main()  {
-	err := storage.InitDatabase("./sqlite3.db")
+	err := storage.InitDatabase()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Ошибка подключения к базе данных: ", err)
 	}
 	router := mux.NewRouter()
 	router.HandleFunc("/users/{id:[0-9]+}", handlers.GetUser).Methods("GET")

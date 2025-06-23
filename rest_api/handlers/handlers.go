@@ -16,10 +16,11 @@ type User struct {
 	Age int `json:"age"`
 }
 
+
 func GetUsers(w http.ResponseWriter, r *http.Request) {
 	rows, err := storage.DB.Query("SELECT * FROM users")
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("ОШИБКА!", err)
 	}
 	defer rows.Close()
 	users := []User{}
@@ -42,7 +43,7 @@ func GetUser(w http.ResponseWriter, request *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(request)
 	userID, _ := strconv.Atoi(params["id"])
-	row := storage.DB.QueryRow("SELECT * FROM users WHERE id = ?", userID)
+	row := storage.DB.QueryRow("SELECT * FROM users WHERE id = $1", userID) // sqlite вместо $1 нужно ?
 	var user User
 	err := row.Scan(&user.ID, &user.Name, &user.Age)
 	if err != nil {
@@ -59,7 +60,7 @@ func CreateUser(w http.ResponseWriter, request *http.Request) {
 		fmt.Println(err)
 	}
 	fmt.Println(user.Name)
-	_, err = storage.DB.Exec("INSERT INTO users (name, age) VALUES (?, ?);", user.Name, user.Age)
+	_, err = storage.DB.Exec("INSERT INTO users (name, age) VALUES ($1, $2);", user.Name, user.Age)  // sqlite вместо $1, $2 нужно ?, ?
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -73,7 +74,7 @@ func UpdateUser (w http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = storage.DB.Exec("UPDATE users SET name=?, age=? where id=?;", user.Name, user.Age, userID)
+	_, err = storage.DB.Exec("UPDATE users SET name=$1, age=$2 where id=$3;", user.Name, user.Age, userID) // sqlite вместо $1, $2, $3 нужно ?, ?, ?
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -82,7 +83,7 @@ func UpdateUser (w http.ResponseWriter, request *http.Request) {
 func DeleteUser (w http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
 	userID, _ := strconv.Atoi(params["id"])
-	_, err := storage.DB.Exec("DELETE FROM users WHERE id=?;", userID)
+	_, err := storage.DB.Exec("DELETE FROM users WHERE id=$1;", userID)  // sqlite вместо $1 нужно ?
 	if err != nil {
 		fmt.Println(err)
 	}
