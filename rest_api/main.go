@@ -1,9 +1,3 @@
-// /users - GET
-// /users/{id} - GET
-// /users - POST
-// /users/{id} - PUT
-// /users/{id} - DELETE
-
 package main
 
 import (
@@ -20,7 +14,11 @@ import (
 func main()  {
 	err := storage.InitDatabase()
 	if err != nil {
-		log.Fatal("Ошибка подключения к базе данных: ", err)
+		log.Fatal("Ошибка подключения к реляционной базе данных: ", err)
+	}
+	err = storage.InitNewClient(":6379")
+	if err != nil {
+		log.Fatal("Ошибка подключения к Redis: ", err)
 	}
 	router := mux.NewRouter()
 	router.HandleFunc("/users/{id:[0-9]+}", handlers.GetUser).Methods("GET")

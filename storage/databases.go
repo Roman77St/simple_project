@@ -2,9 +2,12 @@ package storage
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
-	"time"
 
+	// "time"
+
+	"github.com/Roman77St/simple_project/rest_api/models"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -38,9 +41,9 @@ var DB *sql.DB
 func InitDatabase() (error) {
 	var err error
 	fmt.Println("Запускается приложение. соединение с базой данных через 5 секунд")
-	time.Sleep(time.Second * 5) // для docker compose! Без задержки  нормально не запускается!
-	connStr := "postgres://db_user:db_password@db:5432/db_name?sslmode=disable" // для compose!!!
-	// connStr := "postgres://db_user:db_password@localhost:5433/db_name?sslmode=disable" // для go run!!!
+	// time.Sleep(time.Second * 5) // для docker compose! Без задержки  нормально не запускается!
+	// connStr := "postgres://db_user:db_password@db:5432/db_name?sslmode=disable" // для compose!!!
+	connStr := "postgres://db_user:db_password@localhost:5433/db_name?sslmode=disable" // для go run!!!
 
 	DB, err = sql.Open("postgres", connStr)
 	if err != nil {
@@ -58,3 +61,17 @@ func InitDatabase() (error) {
 	fmt.Println("Соединение с базой данных установлено.")
 	return nil
 	}
+
+func GetFromSQL(id string, user models.User) []byte {
+
+	row := DB.QueryRow("SELECT * FROM users WHERE id = $1", id) // sqlite вместо $1 нужно ?
+	err := row.Scan(&user.ID, &user.Name, &user.Age)
+	if err != nil {
+		fmt.Println(err)
+	}
+	response, err := json.Marshal(user)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return response
+}
