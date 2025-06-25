@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"time"
+	// "time"
 
 	"github.com/Roman77St/simple_project/rest_api/models"
 	_ "github.com/lib/pq"
@@ -40,10 +40,10 @@ var DB *sql.DB
 
 func InitDatabase() (error) {
 	var err error
-	fmt.Println("Запускается приложение. соединение с базой данных через 5 секунд")
-	time.Sleep(time.Second * 5) // для docker compose! Без задержки  нормально не запускается!
-	connStr := "postgres://db_user:db_password@db:5432/db_name?sslmode=disable" // для compose!!!
-	// connStr := "postgres://db_user:db_password@localhost:5433/db_name?sslmode=disable" // для go run!!!
+	// fmt.Println("Запускается приложение. соединение с базой данных через 5 секунд")
+	// time.Sleep(time.Second * 5) // для docker compose! Без задержки  нормально не запускается!
+	// connStr := "postgres://db_user:db_password@db:5432/db_name?sslmode=disable" // для compose!!!
+	connStr := "postgres://db_user:db_password@localhost:5433/db_name?sslmode=disable" // для go run!!!
 
 	DB, err = sql.Open("postgres", connStr)
 	if err != nil {

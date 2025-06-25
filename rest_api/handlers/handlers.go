@@ -14,6 +14,7 @@ import (
 
 func GetUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "http://127.0.0.1:8001")
 	redisKey := "list_user"
 	res, err := storage.RedisDB.Get(redisKey).Result()
 	if err == redis.Nil {
@@ -49,6 +50,8 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 func GetUser(w http.ResponseWriter, request *http.Request) {
 	var user models.User
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "http://127.0.0.1:8001")
+
 	params := mux.Vars(request)
 	userID := params["id"]
 	redisKey := "user:" + userID

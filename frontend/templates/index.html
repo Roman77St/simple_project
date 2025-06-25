@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/static/style.css" rel="stylesheet">
+    <link href="/static/man.ico" rel="icon" type="image/ico" sizes="16x16]">
+    <title>Users</title>
+</head>
+<body>
+    <h2>Список пользователей</h2>
+    <div>
+        <form id="form">
+            <input type="hidden" id="userId" />
+            <p>
+                Имя:<br/>
+                <input id="userName" />
+            </p>
+            <p>
+                Возраст:<br />
+                <input id="userAge" type="number" />
+            </p>
+             <p>
+                <button id="saveBtn">Сохранить</button>
+                <button id="resetBtn">Сбросить</button>
+            </p>
+        </form>
+    </div>
+    <table>
+        <thead><tr><th>Имя</th><th>Возраст</th><th></th></tr></thead>
+        <tbody>
+        </tbody>
+    </table>
+</body>
+<script src="/static/main.js"></script>
+</html>

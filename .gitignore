@@ -1,0 +1,9 @@
+go.mod
+go.sum
+temporary/
+sqlite3.db
+pg_volume/
+data/
+redisdata/
+venv/
+__pycache__
