@@ -24,11 +24,11 @@ func InitNewClient(addr string) (error) {
 }
 
 func SetToRedis(key string, value []byte) {
-	err := RedisDB.Set(key, value, 10*time.Second).Err()
+	err := RedisDB.Set(key, value, 5*time.Second).Err()
 	if err != nil {
 		fmt.Printf("Ошибка при вставке JSON в Redis: %v", err)
 	}
-	fmt.Printf("JSON успешно вставлен в Redis под ключом: %s\n", key)
+	// fmt.Printf("JSON успешно вставлен в Redis под ключом: %s\n", key)
 }
 
 

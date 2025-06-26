@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -8,6 +9,7 @@ import (
 	"github.com/Roman77St/simple_project/storage"
 
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 
@@ -22,14 +24,21 @@ func main()  {
 	}
 
 	router := mux.NewRouter()
-
-
-
 	router.HandleFunc("/api/users/{id:[0-9]+}", handlers.GetUser).Methods("GET")
-	router.HandleFunc("/api/users/{id:[0-9]+}", handlers.UpdateUser).Methods("PUT")
+	router.HandleFunc("/api/users/{id:[0-9]+}", handlers.UpdateUser).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/api/users/{id:[0-9]+}", handlers.DeleteUser).Methods("DELETE")
 	router.HandleFunc("/api/users", handlers.GetUsers).Methods("GET")
-	router.HandleFunc("/api/users", handlers.CreateUser).Methods("POST")
+	router.HandleFunc("/api/users", handlers.CreateUser).Methods("POST", "OPTIONS")
 
-	http.ListenAndServe(":8080", router)
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*", "127.0.0.1:8001", "localhost:8001"}, // Разрешить все источники. ОСТОРОЖНО в продакшене!
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, // Разрешенные методы
+		AllowedHeaders: []string{"Content-Type", "Authorization"}, // Разрешенные заголовки
+		ExposedHeaders: []string{"Content-Length"}, // Заголовки, которые клиент может видеть
+		AllowCredentials: true, // Разрешить отправку куки и авторизационных заголовков
+		MaxAge: 0, // Как долго кэшировать preflight-ответ (в секундах)
+	})
+
+	fmt.Println("Запуск на порту 8080")
+	log.Fatal(http.ListenAndServe(":8080", c.Handler(router)))
 }

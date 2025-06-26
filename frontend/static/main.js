@@ -37,6 +37,68 @@ async function getUser(id) {
     }
 }
 
+// Добавление пользователя
+async function createUser(userName, userAge) {
+    const response = await fetch('http://127.0.0.1:8080/api/users', {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: JSON.stringify({
+            name: userName,
+            age: parseInt(userAge, 10)
+        })
+    });
+    if (response.ok === true) {
+        const user = await response.json();
+        document.querySelector("tbody").append(row(user));
+    }
+    else {
+        const error = await response.json();
+        console.log(error.message);
+    }
+}
+
+async function editUser(userId, userName, userAge) {
+    const response = await fetch(`http://127.0.0.1:8080/api/users/${userId}`, {
+        method: "PUT",
+        headers: { "Accept": "application/json", "Content-Type": "application/json"},
+        body: JSON.stringify({
+            id: userId,
+            name: userName,
+            age: parseInt(userAge, 10)
+        }),
+        mode:"cors",
+    });
+    console.log(response)
+    if (response.ok === true) {
+        const user = await response.json();
+        document.querySelector(`tr[data-rowid='${user.id}']`).replaceWith(row(user));
+    }
+    else {
+        const error = await response.json();
+        console.log(error.message);
+    }
+}
+
+async function deleteUser(id) {
+    const response = await fetch(`http://127.0.0.1:8080/api/users/${id}`, {
+        method: "DELETE",
+        headers: { "Accept": "application/json" },
+        mode: "cors",
+    });
+    if (response.ok === true) {
+        const user = await response.json();
+        document.querySelector(`tr[data-rowid='${user.id}']`).remove();
+    }
+    else {
+        const error = await response.json();
+        console.log(error.message);
+    }
+}
+
 
 function row(user) {
 
@@ -75,7 +137,6 @@ document.getElementById("resetBtn").addEventListener("click", () =>  {
 
 // отправка формы
 document.getElementById("saveBtn").addEventListener("click", async () => {
-
     const id = document.getElementById("userId").value;
     const name = document.getElementById("userName").value;
     const age = document.getElementById("userAge").value;

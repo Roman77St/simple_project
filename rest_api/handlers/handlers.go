@@ -18,7 +18,7 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 	redisKey := "list_user"
 	res, err := storage.RedisDB.Get(redisKey).Result()
 	if err == redis.Nil {
-		fmt.Println("Значение в Redis не установлено")
+		// fmt.Println("Значение в Redis не установлено")
 		// Взять значение из sql-базы
 		rows, err := storage.DB.Query("SELECT * FROM users")
 		if err != nil {
@@ -58,7 +58,7 @@ func GetUser(w http.ResponseWriter, request *http.Request) {
 
 	res, err := storage.RedisDB.Get(redisKey).Result()
 	if err == redis.Nil {
-		fmt.Println("Значение в Redis не установлено")
+		// fmt.Println("Значение в Redis не установлено")
 		// Взять значение из sql-базы, return
 		response := storage.GetFromSQL(userID, user)
 		storage.SetToRedis(redisKey, response)
@@ -74,6 +74,8 @@ func GetUser(w http.ResponseWriter, request *http.Request) {
 
 
 func CreateUser(w http.ResponseWriter, request *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "http://127.0.0.1:8001")
 	var user models.User
 	err := json.NewDecoder(request.Body).Decode(&user)
 	if err != nil {
@@ -87,6 +89,7 @@ func CreateUser(w http.ResponseWriter, request *http.Request) {
 }
 
 func UpdateUser (w http.ResponseWriter, request *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "http://127.0.0.1:8001")
 	params := mux.Vars(request)
 	userID, _ := strconv.Atoi(params["id"])
 	var user models.User
