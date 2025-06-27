@@ -4,3 +4,4 @@ Dockerfile
 sqlite3.db
 temporary/
 frontend/
+auth/

@@ -24,8 +24,10 @@ var DB *sql.DB
 // 	}
 // 	query := `CREATE TABLE IF NOT EXISTS users (
 // 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-// 			name TEXT NOT NULL,
-// 			age INTEGER
+// 		name TEXT NOT NULL,
+// 		age INTEGER,
+// 		email TEXT UNIQUE,
+// 		password TEXT DEFAULT ''
 // 			);`
 // 	_, err = DB.Exec(query)
 // 	if err != nil {
@@ -52,8 +54,11 @@ func InitDatabase() (error) {
 	query := `CREATE TABLE IF NOT EXISTS users (
 			id SERIAL PRIMARY KEY,
 			name varchar(50) NOT NULL,
-			age INTEGER NOT NULL
+			age INTEGER NOT NULL,
+			email varchar(50) UNIQUE,
+			password varchar(50) DEFAULT ''
 			);`
+	// query:= `DROP TABLE users` // для разработки, для изменения таблиц
 		_, err = DB.Exec(query)
 	if err != nil {
 		return err
@@ -65,7 +70,7 @@ func InitDatabase() (error) {
 func GetFromSQL(id string, user models.User) []byte {
 
 	row := DB.QueryRow("SELECT * FROM users WHERE id = $1", id) // sqlite вместо $1 нужно ?
-	err := row.Scan(&user.ID, &user.Name, &user.Age)
+	err := row.Scan(&user.ID, &user.Name, &user.Age, &user.Email, &user.Password)
 	if err != nil {
 		fmt.Println(err)
 	}

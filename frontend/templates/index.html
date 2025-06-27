@@ -3,34 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--<link href="/home/roman/goproject/src/github.com/Roman77St/simple_project/frontend/static/style.css" rel="stylesheet"> -->
     <link href="/static/style.css" rel="stylesheet">
     <link href="/static/man.ico" rel="icon" type="image/ico" sizes="16x16]">
     <title>Users</title>
 </head>
 <body>
-    <h2>Список пользователей</h2>
-    <div>
-        <form id="form">
-            <input type="hidden" id="userId" />
-            <p>
-                Имя:<br/>
-                <input id="userName" autocomplete="username"/>
-            </p>
-            <p>
-                Возраст:<br />
-                <input id="userAge" type="number" />
-            </p>
-             <p>
-                 <button type="button" id="saveBtn">Сохранить</button>
-                 <button type="button" id="resetBtn">Сбросить</button>
+    <div class="container">
+        <div class="top">
+            <a href="/login">Войти в систему</a>
+        </div>
+        <h2>Список пользователей</h2>
+        <div>
+            <form id="form" >
+                <input type="hidden" id="userId" />
+                <p>
+                    Имя:<br/>
+                    <input id="userName" autocomplete="username"/>
                 </p>
-            </form>
+                <p>
+                    Возраст:<br />
+                    <input id="userAge" type="number" />
+                </p>
+                <p>
+                    Почта:<br />
+                    <input id="userEmail"/>
+                </p>
+                <p>
+                    Пароль:<br />
+                    <input id="userPassword" type="password"/>
+                </p>
+                <p>
+                    Повторите пароль:<br />
+                    <input id="userRepeatPassword" type="password"/>
+                </p>
+                 <p>
+                     <button type="button" id="saveBtn">Сохранить</button>
+                     <button type="button" id="resetBtn">Сбросить</button>
+                </p>
+                </form>
+        </div>
+        <table>
+            <thead><tr><th>Имя</th><th>Возраст</th><th>Почта</th></tr></thead>
+            <tbody>
+            </tbody>
+        </table>
+
     </div>
-    <table>
-        <thead><tr><th>Имя</th><th>Возраст</th><th></th></tr></thead>
-        <tbody>
-        </tbody>
-    </table>
 </body>
 <script src="/static/main.js"></script>
 </html>

@@ -28,9 +28,9 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 		users := []models.User{}
 		for rows.Next(){
 			u := models.User{}
-			err := rows.Scan(&u.ID, &u.Name, &u.Age)
+			err := rows.Scan(&u.ID, &u.Name, &u.Age, &u.Email, &u.Password)
 			if err != nil{
-				fmt.Println(err)
+				fmt.Println("Ошибка в функции GetUsers", err)
 				continue
 			}
 			users = append(users, u)
@@ -55,7 +55,6 @@ func GetUser(w http.ResponseWriter, request *http.Request) {
 	params := mux.Vars(request)
 	userID := params["id"]
 	redisKey := "user:" + userID
-
 	res, err := storage.RedisDB.Get(redisKey).Result()
 	if err == redis.Nil {
 		// fmt.Println("Значение в Redis не установлено")
@@ -82,7 +81,7 @@ func CreateUser(w http.ResponseWriter, request *http.Request) {
 		fmt.Println(err)
 	}
 	fmt.Println(user.Name)
-	_, err = storage.DB.Exec("INSERT INTO users (name, age) VALUES ($1, $2);", user.Name, user.Age)  // sqlite вместо $1, $2 нужно ?, ?
+	_, err = storage.DB.Exec("INSERT INTO users (name, age, email, password) VALUES ($1, $2, $3, $4);", user.Name, user.Age, user.Email, user.Password)  // sqlite вместо $1, $2 нужно ?, ?
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -97,7 +96,7 @@ func UpdateUser (w http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	_, err = storage.DB.Exec("UPDATE users SET name=$1, age=$2 where id=$3;", user.Name, user.Age, userID) // sqlite вместо $1, $2, $3 нужно ?, ?, ?
+	_, err = storage.DB.Exec("UPDATE users SET name=$1, age=$2, email=$3, password=$4 where id=$5;", user.Name, user.Age, user.Email, user.Password, userID) // sqlite вместо $1, $2, $3 нужно ?, ?, ?
 	if err != nil {
 		fmt.Println(err)
 	}

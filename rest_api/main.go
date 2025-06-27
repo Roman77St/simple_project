@@ -31,7 +31,7 @@ func main()  {
 	router.HandleFunc("/api/users", handlers.CreateUser).Methods("POST", "OPTIONS")
 
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*", "127.0.0.1:8001", "localhost:8001"}, // Разрешить все источники. ОСТОРОЖНО в продакшене!
+		AllowedOrigins: []string{"http://127.0.0.1:8001"},
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, // Разрешенные методы
 		AllowedHeaders: []string{"Content-Type", "Authorization"}, // Разрешенные заголовки
 		ExposedHeaders: []string{"Content-Length"}, // Заголовки, которые клиент может видеть

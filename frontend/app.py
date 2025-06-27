@@ -17,6 +17,11 @@ app.add_middleware(
 def index():
     return FileResponse("templates/index.html")
 
+
+@app.get("/login")
+def login():
+    return FileResponse("templates/login.html")
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # pip install fastapi uvicorn в виртуальной среде
