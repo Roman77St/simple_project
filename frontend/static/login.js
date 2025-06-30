@@ -1,24 +1,4 @@
 
-// сброс значений формы
-// document.getElementById("resetBtn").addEventListener("click", () =>  {
-//     let form = document.getElementById("form");
-//     form.reset();
-// });
-
-// отправка формы
-// document.getElementById("saveBtn").addEventListener("click", async () => {
-//     const id = document.getElementById("userId").value;
-//     const name = document.getElementById("userName").value;
-//     const age = document.getElementById("userAge").value;
-//     const email = document.getElementById("userEmail").value;
-
-//     if (id === "")
-//         await createUser(name, age, email);
-//     else
-//         await editUser(id, name, age, email);
-//     reset();
-// });
-
 // login
 document.getElementById("confirmBtn").addEventListener("click", async () =>  {
     const email = document.getElementById("user-Email").value;
@@ -41,10 +21,10 @@ async function loginUser(userEmail, userPassword) {
         })
     });
     if (response.ok === true) {
-        const user_token = await response.json();
-        // document.querySelector("tbody").append(row(user));
-        document.querySelector("").innerText()
-
+        const user_token_json = await response.json();
+        const {token, userEmail} = user_token_json;
+        document.getElementById("token").innerHTML = userEmail + " Вы успешно авторизованы";
+        setJwtCookie(token);
     }
     else {
         const error = await response.json();
@@ -52,3 +32,18 @@ async function loginUser(userEmail, userPassword) {
     }
 }
 
+function setJwtCookie(token) {
+    const d = new Date();
+    // Устанавливаем срок действия cookie, например, на 1 день
+    d.setTime(d.getTime() + (1 * 24 * 60 * 60 * 1000)); // 1 день в миллисекундах
+    const expires = "expires=" + d.toUTCString();
+
+    // Устанавливаем cookie
+    // 'jwtToken' - имя вашего cookie
+    // token - значение JWT токена
+    // expires - срок действия
+    // path=/ - делает cookie доступным для всего домена
+    document.cookie = "jwtToken=" + token + ";" + expires + ";path=/;SameSite=Lax;Secure";
+    // Рекомендуется использовать SameSite=Lax (или Strict) для защиты от CSRF
+    // Secure - отправлять cookie только по HTTPS (обязательно для продакшена)
+}
