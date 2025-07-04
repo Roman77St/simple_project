@@ -37,6 +37,14 @@ services:
     depends_on:
       - db
       - redis
+
+  frontend:
+    build: ./frontend
+    image: frontend
+    container_name: frontend-container
+    ports:
+      - 8001:8001
+
   redis:
     image: redis:latest
     container_name: redis-container
