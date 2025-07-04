@@ -59,7 +59,6 @@ func InitDatabase() (error) {
 
 func LoginUser(w http.ResponseWriter, request *http.Request) {
     w.Header().Set("Content-Type", "application/json")
-    w.Header().Set("Access-Control-Allow-Origin", "http://127.0.0.1:8001")
     var user User
 	err := json.NewDecoder(request.Body).Decode(&user)
 	if err != nil {
@@ -99,12 +98,17 @@ func main () {
 	router.HandleFunc("/api/auth/login", LoginUser).Methods("POST", "OPTIONS")
 
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
+		AllowedOrigins: []string{
+								 "http://127.0.0.1:8001",
+								 "http://localhost:8001",
+								 "https://strrv.ru",
+								 "https://www.strrv.ru",
+								},
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, // Разрешенные методы
 		AllowedHeaders: []string{"*"}, // Разрешенные заголовки
 		ExposedHeaders: []string{"Content-Length"}, // Заголовки, которые клиент может видеть
 		AllowCredentials: true, // Разрешить отправку куки и авторизационных заголовков
-		MaxAge: 0, // Как долго кэшировать preflight-ответ (в секундах)
+		MaxAge: 300, // Как долго кэшировать preflight-ответ (в секундах)
 	})
 
 	fmt.Println("Запуск на порту 8082")

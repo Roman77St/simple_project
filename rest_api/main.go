@@ -31,12 +31,18 @@ func main()  {
 	router.HandleFunc("/api/users", handlers.CreateUser).Methods("POST", "OPTIONS")
 
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://127.0.0.1:8001"},
+		AllowedOrigins: []string{
+								 "http://127.0.0.1:8001",
+								 "http://localhost:8001",
+								 "https://strrv.ru",
+								 "https://www.strrv.ru",
+								},
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, // Разрешенные методы
-		AllowedHeaders: []string{"Content-Type", "Authorization"}, // Разрешенные заголовки
+		AllowedHeaders: []string{"*"}, // Разрешенные заголовки
 		ExposedHeaders: []string{"Content-Length"}, // Заголовки, которые клиент может видеть
 		AllowCredentials: true, // Разрешить отправку куки и авторизационных заголовков
-		MaxAge: 0, // Как долго кэшировать preflight-ответ (в секундах)
+		MaxAge: 300, // Как долго кэшировать preflight-ответ (в секундах)
+		Debug: true,
 	})
 
 	fmt.Println("Запуск на порту 8080")

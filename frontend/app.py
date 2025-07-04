@@ -7,13 +7,21 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+
+origins = [
+    "http://localhost:8001",
+    "http://127.0.0.1:8001",
+    "https://strrv.ru",
+    "https://www.strrv.ru",
+]
+
 STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 
 print(STATIC_DIR)
 
 app.add_middleware(
   CORSMiddleware,
-  allow_origins = ["127.0.0.1", "localhost", "*"],
+  allow_origins = origins,
   allow_methods = ["*"],
   allow_headers = ["*"],
   allow_credentials = True,
