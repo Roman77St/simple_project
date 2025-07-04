@@ -19,7 +19,7 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 	redisKey := "list_user"
 	res, err := storage.RedisDB.Get(redisKey).Result()
 	if err == redis.Nil {
-		// fmt.Println("Значение в Redis не установлено")
+		fmt.Println("Значение в Redis не установлено")
 		// Взять значение из sql-базы
 		rows, err := storage.DB.Query("SELECT * FROM users")
 		if err != nil {
@@ -43,6 +43,7 @@ func GetUsers(w http.ResponseWriter, r *http.Request) {
 	} else if err != nil {
 		fmt.Printf("Ошибка при получении JSON из Redis: %v\n", err)
 	}
+	fmt.Println("Взято кешированное значение из Redis")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprint(w, res)
 
@@ -56,7 +57,7 @@ func GetUser(w http.ResponseWriter, request *http.Request) {
 	redisKey := "user:" + userID
 	res, err := storage.RedisDB.Get(redisKey).Result()
 	if err == redis.Nil {
-		// fmt.Println("Значение в Redis не установлено")
+		fmt.Println("Значение в Redis не установлено")
 		// Взять значение из sql-базы, return
 		response := storage.GetFromSQL(userID, user)
 		storage.SetToRedis(redisKey, response)
@@ -65,6 +66,7 @@ func GetUser(w http.ResponseWriter, request *http.Request) {
 	} else if err != nil {
 		fmt.Printf("Ошибка при получении JSON из Redis: %v\n", err)
 	}
+	fmt.Println("Взято кешированное значение из Redis")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprint(w, res)
 
