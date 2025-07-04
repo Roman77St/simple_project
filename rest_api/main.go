@@ -18,7 +18,7 @@ func main()  {
 	if err != nil {
 		log.Fatal("Ошибка подключения к реляционной базе данных: ", err)
 	}
-	err = storage.InitNewClient("localhost:6379") // "redis:6379" - compose, "localhost:6379" - go run
+	err = storage.InitNewClient("redis:6379") // "redis:6379" - compose, "localhost:6379" - go run
 	if err != nil {
 		log.Fatal("Ошибка подключения к Redis: ", err)
 	}

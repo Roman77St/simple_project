@@ -44,10 +44,10 @@ func generateToken(user User) (string, error) {
 
 func InitDatabase() (error) {
 	var err error
-	// fmt.Println("Запускается приложение. соединение с базой данных через 5 секунд")
-	// time.Sleep(time.Second * 5) // для docker compose! Без задержки  нормально не запускается!
-	// connStr := "postgres://db_user:db_password@db:5432/db_name?sslmode=disable" // для compose!!!
-	connStr := "postgres://db_user:db_password@localhost:5433/db_name?sslmode=disable" // для go run!!!
+	fmt.Println("Запускается приложение. соединение с базой данных через 5 секунд")
+	time.Sleep(time.Second * 5) // для docker compose! Без задержки  нормально не запускается!
+	connStr := "postgres://db_user:db_password@db:5432/db_name?sslmode=disable" // для compose!!!
+	// connStr := "postgres://db_user:db_password@localhost:5433/db_name?sslmode=disable" // для go run!!!
 
 	DB, err = sql.Open("postgres", connStr)
 	if err != nil {
@@ -84,7 +84,6 @@ func LoginUser(w http.ResponseWriter, request *http.Request) {
 			Token: token,
 			UserEmail: user1.Email,
 		})
-    fmt.Println(token)
 	} else {
 		fmt.Println("Неправильный логин или пароль")
 	}
@@ -100,9 +99,9 @@ func main () {
 	router.HandleFunc("/api/auth/login", LoginUser).Methods("POST", "OPTIONS")
 
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://127.0.0.1:8001"},
+		AllowedOrigins: []string{"*"},
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, // Разрешенные методы
-		AllowedHeaders: []string{"Content-Type", "Authorization"}, // Разрешенные заголовки
+		AllowedHeaders: []string{"*"}, // Разрешенные заголовки
 		ExposedHeaders: []string{"Content-Length"}, // Заголовки, которые клиент может видеть
 		AllowCredentials: true, // Разрешить отправку куки и авторизационных заголовков
 		MaxAge: 0, // Как долго кэшировать preflight-ответ (в секундах)
